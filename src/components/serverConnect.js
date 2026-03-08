@@ -15,7 +15,8 @@ export default function serverConnect({
   refreshDB,
   onChunkDone
 }) {
-  const ws = new WebSocket('ws://localhost:8080');
+  // http://localhost:8080
+  const ws = new WebSocket('wss://echo-server-568784088349.europe-west1.run.app');
   ws.binaryType = 'arraybuffer';
   wsRef.current = ws;
 
