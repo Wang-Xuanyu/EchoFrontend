@@ -42,7 +42,7 @@ const VOICE_OPTIONS = [
 ];
 
 export default function Main({
-  text, setText, status, data, historyBlobs, currentVoice, setCurrentVoice, audioPlayerRef, onSend, isSending
+  text, setText, status, data, historyBlobs, currentVoice, setCurrentVoice, audioPlayerRef, onSend, isSending,onOpenSidebar
 }) {
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [activeSentence, setActiveSentence] = useState('点击下方播放按钮，开始聆听...');
@@ -114,28 +114,43 @@ export default function Main({
   return (
     <div className="flex-1 flex flex-col h-full relative min-w-0 bg-white">
       {/* 顶部控制栏 */}
-      <div className="flex justify-between items-center p-5 bg-white z-10 border-b border-gray-100">
-        <select
-          value={currentVoice}
-          onChange={(e) => setCurrentVoice(e.target.value)}
-          className="p-2.5 text-base text-gray-700 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer w-72 transition-colors"
-        >
-          {VOICE_OPTIONS.map((group, index) => (
-            <optgroup key={index} label={group.group}>
-              {group.options.map((option) => (
-                <option key={option.value} value={option.value}>{option.label}</option>
-              ))}
-            </optgroup>
-          ))}
-        </select>
+      <div className="flex justify-between items-center p-3 md:p-5 bg-white z-10 border-b border-gray-100 gap-2">
+        <div className="flex items-center gap-2 md:gap-4">
 
+          {/* 🌟 移动端专属：汉堡菜单按钮 */}
+          <button
+            onClick={onOpenSidebar}
+            className="md:hidden p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-lg focus:outline-none"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+
+          {/* 发音人下拉框：手机端稍微变小并自适应宽度 */}
+          <select
+            value={currentVoice}
+            onChange={(e) => setCurrentVoice(e.target.value)}
+            className="p-2 md:p-2.5 text-xs md:text-base text-gray-700 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer w-32 sm:w-48 md:w-72 transition-colors truncate"
+          >
+            {VOICE_OPTIONS.map((group, index) => (
+              <optgroup key={index} label={group.group}>
+                {group.options.map((option) => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+        </div>
+
+        {/* 专注模式按钮：手机端稍微缩减文字和 padding */}
         <button
           onClick={() => setIsFocusMode(!isFocusMode)}
-          className={`px-5 py-2.5 rounded-full font-medium transition-all text-sm flex items-center gap-2 ${
+          className={`px-3 py-1.5 md:px-5 md:py-2.5 rounded-full font-medium transition-all text-xs md:text-sm flex items-center gap-1 md:gap-2 whitespace-nowrap ${
             isFocusMode ? 'bg-indigo-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
-          {isFocusMode ? '🎯 退出专注模式' : '📖 进入专注模式'}
+          {isFocusMode ? '🎯 退出专注' : '📖 进入专注'}
         </button>
       </div>
 

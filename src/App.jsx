@@ -35,6 +35,8 @@ function App() {
   const audioChunksRef = useRef([]);
   const audioPlayerRef = useRef(null);
 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   useEffect(() => { textRef.current = text; }, [text]);
   useEffect(() => { currentInfoIdRef.current = currentInfoId; }, [currentInfoId]);
   useEffect(() => { currentVoiceRef.current = currentVoice; }, [currentVoice]);
@@ -136,23 +138,32 @@ function App() {
   };
 
   return (
-    <div className="flex flex-row h-screen w-screen overflow-hidden bg-gray-50 text-gray-800">
+    <div className="flex flex-row h-screen w-screen overflow-hidden bg-gray-50 text-gray-800 relative">
+        <Sidebar
+          chatInfos={chatInfos}
+          currentInfoId={currentInfoId}
+          setCurrentInfoId={setCurrentInfoId}
+          onDeleteChat={handleDeleteChat}
+          // 🌟 传入侧边栏开关状态和控制函数
+          isOpen={isSidebarOpen}
+          setIsOpen={setIsSidebarOpen}
+        />
 
-
-      <Sidebar onDeleteChat={handleDeleteChat} chatInfos={chatInfos} currentInfoId={currentInfoId} setCurrentInfoId={setCurrentInfoId} />
-      <Main
-        text={text}
-        setText={setText}
-        status={status}
-        data={data}
-        historyBlobs={historyBlobs}
-        currentVoice={currentVoice}
-        setCurrentVoice={setCurrentVoice}
-        audioPlayerRef={audioPlayerRef}
-        onSend={handleSend}
-        isSending={isSending} // 🌟 传给 Main，让发送按钮在排队时禁用
-      />
-    </div>
+        <Main
+          text={text}
+          setText={setText}
+          status={status}
+          data={data}
+          historyBlobs={historyBlobs}
+          currentVoice={currentVoice}
+          setCurrentVoice={setCurrentVoice}
+          audioPlayerRef={audioPlayerRef}
+          onSend={handleSend}
+          isSending={isSending}
+          // 🌟 传入打开侧边栏的方法，给 Main 的汉堡按钮用
+          onOpenSidebar={() => setIsSidebarOpen(true)}
+        />
+      </div>
   );
 }
 // <div onClick={async ()=>{
